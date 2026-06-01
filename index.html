@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Olivia Acu&ntilde;a &mdash; Filmmaker &amp; Artist</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #e0e0b8;
+      --text: #000000;
+      --accent: #4a4a2a;
+      --link: #000000;
+      --muted: #6a6a48;
+      --border: #a0a07a;
+      --ruler-bg: #d4d4aa;
+      --ruler-tick: #4a4a2a;
+      --ruler-num: #5a5a38;
+      --rs: 24px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 48px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Special Elite', 'Courier New', monospace;
+      font-size: 15px;
+      line-height: 1.65;
+      padding-top: var(--rs);
+      padding-left: var(--rs);
+      overflow-x: hidden;
+    }
+
+    /* scan lines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.025) 0px,
+        rgba(0,0,0,0.025) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    }
+
+    /* ── RULERS ── */
+    #ruler-corner {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--rs); height: var(--rs);
+      background: var(--ruler-bg);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      z-index: 201;
+    }
+    #ruler-top {
+      position: fixed;
+      top: 0; left: var(--rs);
+      height: var(--rs);
+      z-index: 200;
+      display: block;
+      image-rendering: pixelated;
+    }
+    #ruler-left {
+      position: fixed;
+      top: var(--rs); left: 0;
+      width: var(--rs);
+      z-index: 200;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    /* ── SITE ── */
+    #site {
+      max-width: 1100px;
+      padding: 32px 60px 80px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 10px 0 12px;
+      margin-bottom: 4px;
+      gap: 20px;
+    }
+    .live-dot {
+      font-size: 0.5rem;
+      color: var(--accent);
+      animation: blink 1.3s step-end infinite;
+      vertical-align: super;
+      margin-left: 4px;
+    }
+    .site-name-link { text-decoration: none; color: inherit; border: none; outline: none; }
+    .site-title {
+      font-family: 'Special Elite', Georgia, serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      color: var(--accent);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+    .site-title::after {
+      content: '_';
+      animation: blink 1.3s step-end infinite;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+    @keyframes blink { 0%,100%{opacity:0.7} 50%{opacity:0} }
+    .site-tagline {
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      text-align: right;
+      line-height: 1.6;
+      display: none;
+    }
+    .site-tagline.visible { display: block; }
+
+    /* ── NAV ── */
+    nav {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    nav ul { list-style: none; display: none; flex-wrap: wrap; align-items: center; }
+    nav ul.visible { display: flex; }
+    nav li::before { content: '·'; color: var(--muted); margin: 0 7px; font-size: 0.8rem; }
+    nav li:first-child::before { display: none; }
+    nav a {
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.15s;
+      cursor: crosshair;
+    }
+    nav a:hover, nav a.active {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ── HOME ── */
+    #home {
+      background-image:
+        radial-gradient(circle, #8a8a60 1px, transparent 1px),
+        repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(100,100,60,0.07) 4px, rgba(100,100,60,0.07) 5px),
+        repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(100,100,60,0.07) 4px, rgba(100,100,60,0.07) 5px);
+      background-size: 4px 4px, 5px 5px, 5px 5px;
+      background-color: var(--bg);
+    }
+
+    .cam-placeholder {
+      position: relative;
+      border: 1px dashed var(--border);
+      flex: 1;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 4px;
+      overflow: hidden;
+      cursor: crosshair;
+      background: transparent;
+    }
+    .cam-placeholder::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px;
+      background: var(--border);
+      transform: translateY(-50%);
+      opacity: 0.5;
+    }
+    .cam-placeholder::after {
+      content: '';
+      position: absolute;
+      left: 50%; top: 0; bottom: 0;
+      width: 1px;
+      background: var(--border);
+      transform: translateX(-50%);
+      opacity: 0.5;
+    }
+    .crop-mark {
+      position: absolute;
+      width: 14px; height: 14px;
+      border-color: var(--accent);
+      border-style: solid;
+      opacity: 0.6;
+    }
+    .crop-mark.tl { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+    .crop-mark.tr { top: 10px; right: 10px; border-width: 1px 1px 0 0; }
+    .crop-mark.bl { bottom: 10px; left: 10px; border-width: 0 0 1px 1px; }
+    .crop-mark.br { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+    .cam-label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.35em;
+      z-index: 1;
+    }
+    .cam-sub {
+      font-family: 'Courier New', monospace;
+      font-size: 0.6rem;
+      color: #383632;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-top: 10px;
+      z-index: 1;
+    }
+
+    /* ── PROJECT GRID ── */
+    .project-grid {
+      display: block;
+      position: relative;
+    }
+    .project-grid .thumb-tile {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .project-grid .thumb-tile.scattered {
+      opacity: 1;
+    }
+    .thumb-tile {
+      position: relative;
+      aspect-ratio: 3/2;
+      overflow: hidden;
+      cursor: crosshair;
+      background: #111;
+      display: block;
+      text-decoration: none;
+      border: 2px solid;
+      border-color: #dfdfdf #808080 #808080 #dfdfdf;
+    }
+    .thumb-tile img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(75%) contrast(1.08) brightness(0.78);
+      transition: filter 0.5s ease, transform 0.5s ease;
+      display: block;
+    }
+    .thumb-tile:hover img { filter: none; }
+    .thumb-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 28px rgba(0,0,0,0.45);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .thumb-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent, transparent 5px,
+        rgba(44,43,39,0.35) 5px, rgba(44,43,39,0.35) 6px
+      );
+    }
+
+    /* ── PROJECT SECTIONS ── */
+    .project-section {
+      padding: 24px 20px 32px;
+      border: 1px solid var(--border);
+      background: rgba(224,224,170,0.4);
+      margin-bottom: 6px;
+    }
+    .section-eyebrow {
+      font-family: 'Courier New', monospace;
+      font-size: 0.62rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+    .project-title {
+      font-family: 'Special Elite', Georgia, serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      color: var(--text);
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+    .project-meta {
+      font-family: 'Courier New', monospace;
+      font-size: 0.67rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      margin-bottom: 28px;
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+    .project-meta span + span::before {
+      content: ' / ';
+      color: var(--border);
+      margin: 0 6px;
+    }
+
+    /* ── FILMSTRIP ── */
+    .filmstrip {
+      display: flex;
+      gap: 3px;
+      overflow-x: auto;
+      margin: 0 0 28px;
+      cursor: ew-resize;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+      padding-bottom: 6px;
+    }
+    .filmstrip::-webkit-scrollbar { height: 2px; }
+    .filmstrip::-webkit-scrollbar-track { background: transparent; }
+    .filmstrip::-webkit-scrollbar-thumb { background: var(--border); }
+    .film-frame {
+      position: relative;
+      flex-shrink: 0;
+      display: block;
+      outline: 1px solid var(--border);
+    }
+    .film-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 22px rgba(0,0,0,0.42);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .filmstrip img {
+      height: 260px;
+      width: auto;
+      object-fit: cover;
+      filter: grayscale(55%) contrast(1.1) brightness(0.88);
+      transition: filter 0.4s ease;
+      display: block;
+      cursor: zoom-in;
+    }
+    .filmstrip img:hover { filter: none; }
+    .filmstrip video {
+      height: 260px;
+      width: auto;
+      flex-shrink: 0;
+      display: block;
+      cursor: default;
+      background: #000;
+    }
+
+    /* ── TEXT CONTENT ── */
+    .project-description {
+      max-width: 680px;
+      font-size: 0.94rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+    .project-description p + p { margin-top: 14px; }
+    .project-description em { font-style: italic; }
+
+    .screenings { margin-top: 26px; }
+    .screenings-label {
+      font-family: 'Courier New', monospace;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .screenings ul {
+      list-style: none;
+      border: 1px dashed var(--border);
+      padding: 12px 18px;
+      display: inline-block;
+    }
+    .screenings li {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      padding: 3px 0;
+      letter-spacing: 0.05em;
+    }
+    .screenings li::before { content: '·  '; color: var(--accent); }
+
+    .ext-link {
+      display: inline-block;
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem;
+      color: var(--link);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 18px;
+      transition: color 0.2s;
+    }
+    .ext-link::after { content: ' ↗'; }
+    .ext-link:hover { color: var(--accent); }
+
+    /* ── LIVING REALITY PLACEHOLDER ── */
+    .no-stills-placeholder {
+      border: 1px dashed var(--border);
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 0 20px;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent, transparent 5px,
+        rgba(44,43,39,0.2) 5px, rgba(44,43,39,0.2) 6px
+      );
+    }
+    .no-stills-placeholder span {
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    /* ── ART SECTION ── */
+    .art-subsection { margin-top: 44px; }
+    .art-subsection:first-of-type { margin-top: 0; }
+    .art-subsection-title {
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      margin-bottom: 18px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 56px 0 72px;
+      border-top: 1px solid var(--border);
+    }
+    .about-eyebrow {
+      font-family: 'Courier New', monospace;
+      font-size: 0.62rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+    .about-title {
+      font-family: 'Special Elite', Georgia, serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--accent);
+      margin-bottom: 36px;
+      letter-spacing: 0.02em;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .about-bio {
+      font-size: 0.93rem;
+      line-height: 1.85;
+    }
+    .about-bio p + p { margin-top: 15px; }
+    .about-bio em { font-style: italic; }
+    .about-contact h3 {
+      font-family: 'Courier New', monospace;
+      font-size: 0.62rem;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+    .contact-block { margin-bottom: 22px; }
+    .contact-label {
+      display: block;
+      font-family: 'Courier New', monospace;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    a.contact-item {
+      font-family: 'Courier New', monospace;
+      font-size: 0.76rem;
+      color: var(--link);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
+      display: block;
+    }
+    a.contact-item:hover { color: var(--accent); }
+
+    /* ── HIDDEN SECTIONS BY DEFAULT ── */
+    .project-section, #about, footer { display: none; }
+
+    /* ── MODAL ── */
+    #modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(160,160,110,0.6);
+      z-index: 500;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow-y: auto;
+      padding: 40px 24px 60px;
+    }
+    #modal.hidden { display: none; }
+    #modal-box {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      width: 100%;
+      max-width: 960px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    #modal-titlebar {
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 6px;
+      cursor: default;
+      user-select: none;
+    }
+    #modal-title {
+      font-family: 'Courier New', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--bg);
+    }
+
+    /* ── WIN95 BUTTONS ── */
+    .win-btn {
+      background: #c0c0c0;
+      border: none;
+      box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset  1px  1px #ffffff,
+        inset -2px -2px #808080,
+        inset  2px  2px #dfdfdf;
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem;
+      color: #000000;
+      cursor: pointer;
+      padding: 3px 10px;
+      letter-spacing: 0.05em;
+      min-width: 22px;
+    }
+    .win-btn:active {
+      box-shadow:
+        inset  1px  1px #0a0a0a,
+        inset -1px -1px #ffffff,
+        inset  2px  2px #808080,
+        inset -2px -2px #dfdfdf;
+      padding: 4px 9px 2px 11px;
+    }
+    .win-btn:focus { outline: 1px dotted #000; outline-offset: -4px; }
+    #modal-body { padding: 24px 28px 32px; }
+    #modal-body .project-section {
+      display: block;
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+    }
+    #modal-body #about { display: block; }
+
+    /* ── BACK BUTTON ── */
+    #back-btn { display: none; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-family: 'Courier New', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ── LIGHTBOX ── */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(200,201,175,0.97);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #lightbox.hidden { display: none; }
+    #lb-img {
+      max-width: calc(100vw - 120px);
+      max-height: calc(100vh - 60px);
+      object-fit: contain;
+      display: block;
+    }
+    #lb-close, #lb-prev, #lb-next {
+      position: fixed;
+      z-index: 1001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #lb-close { top: 28px; right: 28px; width: 34px; height: 34px; font-size: 1rem; }
+    #lb-prev { top: 50%; left: 20px; transform: translateY(-50%); width: 42px; height: 42px; font-size: 1.4rem; }
+    #lb-next { top: 50%; right: 20px; transform: translateY(-50%); width: 42px; height: 42px; font-size: 1.4rem; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #site { padding: 24px 32px 60px; }
+      .project-grid-top { grid-template-columns: repeat(2, 1fr); }
+      .project-grid-bottom { grid-template-columns: repeat(3, 1fr); }
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+      .cam-placeholder { height: 200px; }
+      .filmstrip img { height: 200px; }
+    }
+    @media (max-width: 580px) {
+      #site { padding: 20px 18px 60px; }
+      .project-grid-top, .project-grid-bottom { grid-template-columns: repeat(2, 1fr); }
+      .filmstrip img { height: 150px; }
+      header { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .site-tagline { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="ruler-corner"></div>
+  <canvas id="ruler-top"></canvas>
+  <canvas id="ruler-left"></canvas>
+
+  <div id="site">
+
+    <header>
+      <a href="#home" class="site-name-link">
+        <h1 class="site-title">Olivia Acu&ntilde;a<span class="live-dot">●</span></h1>
+      </a>
+      <span class="site-tagline">filmmaker &amp; artist<br>brooklyn, ny</span>
+    </header>
+
+    <nav>
+      <button id="back-btn">← back</button>
+      <ul>
+        <li><a href="#home">home</a></li>
+        <li><a href="#soil-story">soil story</a></li>
+        <li><a href="#seeing-things">seeing things</a></li>
+        <li><a href="#altar-piece">altar piece</a></li>
+        <li><a href="#i-dream-in-color">i dream in color</a></li>
+        <li><a href="#in-love-in-time">in love, in time</a></li>
+        <li><a href="#im-at-home">i'm at home</a></li>
+        <li><a href="#living-reality">living reality</a></li>
+        <li><a href="#art-photos">art + photos</a></li>
+        <li><a href="#about">about</a></li>
+      </ul>
+    </nav>
+
+    <main>
+
+      <!-- ── HOME ── -->
+      <section id="home">
+        <div class="project-grid">
+          <!-- soil story -->
+          <a href="#soil-story" class="thumb-tile"><img src="projects/Soil Story/StillOption_Highway.png" alt="Soil Story"></a>
+          <a href="#soil-story" class="thumb-tile"><img src="projects/Soil Story/reservoir-01.png" alt="Soil Story"></a>
+          <a href="#soil-story" class="thumb-tile"><img src="projects/Soil Story/1.png" alt="Soil Story"></a>
+          <a href="#soil-story" class="thumb-tile"><img src="projects/Soil Story/2.png" alt="Soil Story"></a>
+          <a href="#soil-story" class="thumb-tile"><img src="projects/Soil Story/IMG_8344.jpg" alt="Soil Story"></a>
+          <a href="#soil-story" class="thumb-tile"><img src="projects/Soil Story/StillOption_ReservoirTree (1).png" alt="Soil Story"></a>
+          <!-- seeing things -->
+          <a href="#seeing-things" class="thumb-tile"><img src="projects/seeing things dreaming things/seeing-01.png" alt="Seeing Things"></a>
+          <a href="#seeing-things" class="thumb-tile"><img src="projects/seeing things dreaming things/seeing-02.png" alt="Seeing Things"></a>
+          <a href="#seeing-things" class="thumb-tile"><img src="projects/seeing things dreaming things/seeing-03.png" alt="Seeing Things"></a>
+          <a href="#seeing-things" class="thumb-tile"><img src="projects/seeing things dreaming things/seeing-04.png" alt="Seeing Things"></a>
+          <a href="#seeing-things" class="thumb-tile"><img src="projects/seeing things dreaming things/seeing-05.png" alt="Seeing Things"></a>
+          <!-- altar piece -->
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.3.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.6.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.12.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.29.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.44.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.52.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.72.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.97.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.137.1.jpeg" alt="Altar Piece"></a>
+          <a href="#altar-piece" class="thumb-tile"><img src="projects/Altar Piece/Untitled_1.143.1.jpeg" alt="Altar Piece"></a>
+          <!-- i dream in color -->
+          <a href="#i-dream-in-color" class="thumb-tile"><img src="projects/I Dream In Color/dream-01.png" alt="I Dream In Color"></a>
+          <a href="#i-dream-in-color" class="thumb-tile"><img src="projects/I Dream In Color/dream-02.png" alt="I Dream In Color"></a>
+          <a href="#i-dream-in-color" class="thumb-tile"><img src="projects/I Dream In Color/dream-03.png" alt="I Dream In Color"></a>
+          <a href="#i-dream-in-color" class="thumb-tile"><img src="projects/I Dream In Color/dream-04.png" alt="I Dream In Color"></a>
+          <a href="#i-dream-in-color" class="thumb-tile"><img src="projects/I Dream In Color/dream-05.png" alt="I Dream In Color"></a>
+          <!-- in love in time -->
+          <a href="#in-love-in-time" class="thumb-tile"><img src="projects/In Love In Time/iLITposter.png" alt="In Love In Time"></a>
+          <a href="#in-love-in-time" class="thumb-tile"><img src="projects/In Love In Time/Still4.png" alt="In Love In Time"></a>
+          <a href="#in-love-in-time" class="thumb-tile"><img src="projects/In Love In Time/Still7.jpeg" alt="In Love In Time"></a>
+          <a href="#in-love-in-time" class="thumb-tile"><img src="projects/In Love In Time/_G24-xs8.jpeg" alt="In Love In Time"></a>
+          <!-- im at home -->
+          <a href="#im-at-home" class="thumb-tile"><img src="projects/I_m At Home/Im At Home Poster.png" alt="I'm At Home"></a>
+          <a href="#im-at-home" class="thumb-tile"><img src="projects/I_m At Home/FINAL CUT.00_10_18_00.Still006.png" alt="I'm At Home"></a>
+          <a href="#im-at-home" class="thumb-tile"><img src="projects/I_m At Home/P1220594.jpg" alt="I'm At Home"></a>
+          <a href="#im-at-home" class="thumb-tile"><img src="projects/I_m At Home/P1220659.jpg" alt="I'm At Home"></a>
+          <!-- art photos -->
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/Scan 27.jpg" alt="Art"></a>
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/P1250456.jpg" alt="Art"></a>
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/F92AACBD-3F86-4C3B-90E8-097F4305DBF3.JPG" alt="Art"></a>
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/VAMPIRE_/000085100015.jpg" alt="Art"></a>
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/VAMPIRE_/P1280454-Edit-2.jpg" alt="Art"></a>
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/VAMPIRE_/P1290309-Edit.jpg" alt="Art"></a>
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/VAMPIRE_/P1300479-Edit.jpg" alt="Art"></a>
+          <a href="#art-photos" class="thumb-tile"><img src="projects/ART-PHOTOS/VAMPIRE_/P1300564-Edit-3.jpg" alt="Art"></a>
+        </div>
+      </section>
+
+      <!-- ── 01 SOIL STORY ── -->
+      <section id="soil-story" class="project-section">
+        <div class="section-eyebrow">01 &mdash; Films / Director</div>
+        <h2 class="project-title">Soil Story</h2>
+        <div class="project-meta">
+          <span>Director</span><span>2025</span><span>16mm</span><span>Experimental Documentary</span>
+        </div>
+        <div class="filmstrip">
+          <img src="projects/Soil Story/StillOption_Highway.png" alt="Soil Story" loading="lazy">
+          <img src="projects/Soil Story/reservoir-01.png" alt="Soil Story" loading="lazy">
+          <img src="projects/Soil Story/1.png" alt="Soil Story" loading="lazy">
+          <img src="projects/Soil Story/2.png" alt="Soil Story" loading="lazy">
+          <img src="projects/Soil Story/IMG_8344.jpg" alt="Soil Story installation" loading="lazy">
+          <img src="projects/Soil Story/StillOption_ReservoirTree (1).png" alt="Soil Story" loading="lazy">
+        </div>
+        <div class="project-description">
+          <p>Soil Story is a 16mm film, combining found foliage and an experimental approach to the film developing process that is in collaboration with the environment. The film explores the juxtaposing histories and memories of the Ridgewood Reservoir and the Cemetery Belt. Two locations that straddle each other with the Jackie Robinson Parkway cut in between.</p>
+          <p>With both locations in conversation with each other, we explore the cycles of time, space, memory and land development and disposal.</p>
+        </div>
+        <div class="screenings">
+          <div class="screenings-label">Screenings</div>
+          <ul>
+            <li>Science New Wave Film Festival (2025)</li>
+            <li>Soil and Sound Waves at the Rockaways (2025)</li>
+            <li>Urban Soils: Soil Symposium (2025)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ── 02 SEEING THINGS ── -->
+      <section id="seeing-things" class="project-section">
+        <div class="section-eyebrow">02 &mdash; Films / Director</div>
+        <h2 class="project-title">Seeing Things, Dreaming Things</h2>
+        <div class="project-meta">
+          <span>Director / Co-creator</span><span>2021</span><span>16mm + Hi-8 Tape</span><span>Personal Documentary</span>
+        </div>
+        <div class="filmstrip">
+          <img src="projects/seeing things dreaming things/seeing-01.png" alt="Seeing Things still" loading="lazy">
+          <img src="projects/seeing things dreaming things/seeing-02.png" alt="Seeing Things still" loading="lazy">
+          <img src="projects/seeing things dreaming things/seeing-03.png" alt="Seeing Things still" loading="lazy">
+          <img src="projects/seeing things dreaming things/seeing-04.png" alt="Seeing Things still" loading="lazy">
+          <img src="projects/seeing things dreaming things/seeing-05.png" alt="Seeing Things still" loading="lazy">
+        </div>
+        <div class="project-description">
+          <p><em>Seeing Things, Dreaming Things</em> is a personal documentary that explores memories and dreams, in an effort to organize these subjective and personal experiences into something more logical and concrete.</p>
+          <p>Filmed on 16mm film and Hi-8 Tape. Created by Olivia Acu&ntilde;a, Editing by Phillip Thompson.</p>
+        </div>
+      </section>
+
+      <!-- ── 03 ALTAR PIECE ── -->
+      <section id="altar-piece" class="project-section">
+        <div class="section-eyebrow">03 &mdash; Films / Cinematographer &middot; Producer &middot; Colorist</div>
+        <h2 class="project-title">Altar Piece</h2>
+        <div class="project-meta">
+          <span>Cinematographer / Producer / Colorist</span><span>2025</span><span>Documentary</span>
+        </div>
+        <div class="filmstrip">
+          <img src="projects/Altar Piece/Untitled_1.3.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.6.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.12.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.29.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.44.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.52.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.72.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.97.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.137.1.jpeg" alt="Altar Piece" loading="lazy">
+          <img src="projects/Altar Piece/Untitled_1.143.1.jpeg" alt="Altar Piece" loading="lazy">
+        </div>
+        <div class="project-description">
+          <p>The Holy Mary amidst ongoing traffic. A basement of deities with the light on 24/7. A collection of trash, or so it seems.</p>
+          <p>&ldquo;Altar Piece&rdquo; explores Ridgewood, Queens, through the altars and shrines that ornament the neighborhood. While some are more recognizable in form than others, these objects are brought together with a considered touch.</p>
+        </div>
+      </section>
+
+      <!-- ── 04 I DREAM IN COLOR ── -->
+      <section id="i-dream-in-color" class="project-section">
+        <div class="section-eyebrow">04 &mdash; Films / Cinematographer</div>
+        <h2 class="project-title">I Dream In Color</h2>
+        <div class="project-meta">
+          <span>Cinematographer</span><span>2021</span><span>Narrative Short</span>
+        </div>
+        <div class="filmstrip">
+          <img src="projects/I Dream In Color/dream-01.png" alt="I Dream In Color" loading="lazy">
+          <img src="projects/I Dream In Color/dream-02.png" alt="I Dream In Color" loading="lazy">
+          <img src="projects/I Dream In Color/dream-03.png" alt="I Dream In Color" loading="lazy">
+          <img src="projects/I Dream In Color/dream-04.png" alt="I Dream In Color" loading="lazy">
+          <img src="projects/I Dream In Color/dream-05.png" alt="I Dream In Color" loading="lazy">
+        </div>
+        <div class="project-description">
+          <p>When an archetypal 1950&rsquo;s woman is unsettled by her existence as a housewife, she escapes into a fantasy realm of art and freedom; in spite of her apathetic husband.</p>
+          <p>A narrative short directed by Madison DeCory. Cinematographer &mdash; Olivia Acu&ntilde;a.</p>
+        </div>
+      </section>
+
+      <!-- ── 05 IN LOVE IN TIME ── -->
+      <section id="in-love-in-time" class="project-section">
+        <div class="section-eyebrow">05 &mdash; Films / Cinematographer</div>
+        <h2 class="project-title">In Love, In Time</h2>
+        <div class="project-meta">
+          <span>Cinematographer</span><span>2019</span><span>16mm</span><span>Short Film</span>
+        </div>
+        <div class="filmstrip">
+          <img src="projects/In Love In Time/iLITposter.png" alt="In Love In Time poster" loading="lazy">
+          <img src="projects/In Love In Time/Still4.png" alt="In Love In Time still" loading="lazy">
+          <img src="projects/In Love In Time/Still7.jpeg" alt="In Love In Time still" loading="lazy">
+          <img src="projects/In Love In Time/_G24-xs8.jpeg" alt="In Love In Time still" loading="lazy">
+        </div>
+        <div class="project-description">
+          <p><em>In Love, In Time</em>, follows a narrative of a woman who is in two different relationships during two periods of her life, but the emotions that the relationships produce are the same. The film is meant to explore the idea of relationship dependency amongst youth, and one&rsquo;s identity solely being tied to another.</p>
+          <p>Directed by Philip Thompson. Cinematography by Olivia Acuna. 16mm.</p>
+        </div>
+        <div class="screenings">
+          <div class="screenings-label">Screenings</div>
+          <ul>
+            <li>Life Screenings International Short Film Festival</li>
+            <li>Love Actually International Storyteller Showcase</li>
+            <li>On Art &mdash; Poland</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ── 06 I'M AT HOME ── -->
+      <section id="im-at-home" class="project-section">
+        <div class="section-eyebrow">06 &mdash; Production Design</div>
+        <h2 class="project-title">I'm At Home</h2>
+        <div class="project-meta">
+          <span>Production Designer</span><span>2021</span><span>Short Film</span>
+        </div>
+        <div class="filmstrip">
+          <img src="projects/I_m At Home/Im At Home Poster.png" alt="I'm At Home poster" loading="lazy">
+          <img src="projects/I_m At Home/FINAL CUT.00_10_18_00.Still006.png" alt="I'm At Home still" loading="lazy">
+          <img src="projects/I_m At Home/P1220594.jpg" alt="I'm At Home still" loading="lazy">
+          <img src="projects/I_m At Home/P1220659.jpg" alt="I'm At Home still" loading="lazy">
+        </div>
+        <div class="project-description">
+          <p>The host of a children&rsquo;s television show starts experiencing burnout after needing to force creativity every day. &ldquo;I&rsquo;m At Home,&rdquo; directed by and starring Philip Thompson, is a lo-fi vision of artistic fatigue that starts off all smiles before beginning to disintegrate.</p>
+        </div>
+        <a href="https://www.nobudge.com/im-at-home" target="_blank" rel="noopener" class="ext-link">Watch on NoBudge</a>
+      </section>
+
+      <!-- ── 07 LIVING IN REALITY ── -->
+      <section id="living-reality" class="project-section">
+        <div class="section-eyebrow">07 &mdash; Production Design</div>
+        <h2 class="project-title">Living in Reality</h2>
+        <div class="project-meta">
+          <span>Production Designer</span><span>2023</span><span>Short Film</span>
+        </div>
+        <div class="no-stills-placeholder">
+          <span>[ stills coming soon ]</span>
+        </div>
+        <a href="https://www.nobudge.com/living-reality" target="_blank" rel="noopener" class="ext-link">Watch on NoBudge</a>
+      </section>
+
+      <!-- ── 08 ART / PHOTOGRAPHS ── -->
+      <section id="art-photos" class="project-section">
+        <div class="section-eyebrow">08 &mdash; Art / Photographs</div>
+        <h2 class="project-title">Art + Photographs</h2>
+        <div class="project-meta">
+          <span>Artist / Photographer</span><span>2019 &mdash; ongoing</span>
+        </div>
+
+        <div class="art-subsection">
+          <div class="art-subsection-title">Cyanotypes + Self-Portraits</div>
+          <div class="filmstrip">
+            <img src="projects/ART-PHOTOS/Scan 27.jpg" alt="Cyanotype" loading="lazy">
+            <img src="projects/ART-PHOTOS/P1250456.jpg" alt="Self portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/F92AACBD-3F86-4C3B-90E8-097F4305DBF3.JPG" alt="Art photograph" loading="lazy">
+            <img src="projects/ART-PHOTOS/eyerescan 24.jpg" alt="Eye scan" loading="lazy">
+            <video src="projects/ART-PHOTOS/Sequence 02_3.mp4" controls muted loop playsinline></video>
+          </div>
+          <div class="project-description">
+            <p>Self-portraits and cyanotypes. Deer cyanotype &times; self portrait. Dead possum cyanotype photograph with frame. Self portraits in woods. Cyanotype stop motion.</p>
+          </div>
+        </div>
+
+        <div class="art-subsection">
+          <div class="art-subsection-title">The Collector (2019)</div>
+          <div class="project-description">
+            <p>I met Marie Sirakos in 2018, she owned an antique store at the time called the Vintage Industry. Marie is passionate about objects and knowing their history and where they came from. I asked her one day if I could come along with her to one of her &ldquo;hunts.&rdquo;</p>
+            <p>We arrived at Rick&rsquo;s house, it was a large property with multiple houses and spaces full of things he collected over the years. Rick had had a personal connection to everything and stories to go along with them.</p>
+          </div>
+        </div>
+
+        <div class="art-subsection">
+          <div class="art-subsection-title">Lesbian Vampire Portraits (2019 &mdash; ongoing)</div>
+          <div class="filmstrip">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/000085100015.jpg" alt="Vampire portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/P1280380-Edit.png" alt="Vampire portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/P1280454-Edit-2.jpg" alt="Vampire portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/P1290309-Edit.jpg" alt="Vampire portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/P1290332-Edit.jpg" alt="Vampire portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/P1300479-Edit.jpg" alt="Vampire portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/P1300564-Edit-3.jpg" alt="Vampire portrait" loading="lazy">
+            <img src="projects/ART-PHOTOS/VAMPIRE_/P1300584-Edit.png" alt="Vampire portrait" loading="lazy">
+          </div>
+          <div class="project-description">
+            <p>This is an ongoing project I have been working on for a few years where I photograph my lesbian/queer friends as vampires.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ABOUT ── -->
+      <section id="about">
+        <div class="about-eyebrow">About / Contact</div>
+        <h2 class="about-title">Olivia Acu&ntilde;a</h2>
+        <div class="about-grid">
+          <div class="about-bio">
+            <p>Olivia Acu&ntilde;a is an interdisciplinary artist and filmmaker based in Brooklyn. Olivia is obsessed with the materiality of film and explores themes of memory, magical realism and the human condition within her work. Often working with 16mm film, analog equipment and experimenting with different processing techniques.</p>
+            <p>In 2025 Olivia took part in an 8 month artist residency at Union Docs, during this residency Olivia worked on two short documentaries <em>Soil Story</em> and <em>Altar Piece</em>. <em>Soil Story</em> premiered at the Science New Wave Film festival and as an installation piece at The Rockaway Soils festival and Urban Soils: Soil Symposium.</p>
+            <p>Currently, Olivia works as projectionist at Anthology Film Archives and as a Colorist at Metropolis Post. She also works freelance as a DP and colorist. She is also a programmer and Co-founder of Peace Centers micro cinema in BedStuy that showcases local and independent film monthly.</p>
+          </div>
+          <div class="about-contact">
+            <h3>Contact</h3>
+            <div class="contact-block">
+              <span class="contact-label">Email</span>
+              <a href="mailto:your@email.com" class="contact-item">your@email.com</a>
+            </div>
+            <div class="contact-block">
+              <span class="contact-label">Social</span>
+              <a href="#" class="contact-item">@handle</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Olivia Acu&ntilde;a &mdash; Brooklyn, NY</p>
+      <p>last updated: june 2025 &nbsp;|&nbsp; best viewed at 1024x768 &nbsp;|&nbsp; <a href="mailto:your@email.com">✉ contact</a></p>
+    </footer>
+
+  </div><!-- /#site -->
+
+  <!-- ── MODAL ── -->
+  <div id="modal" class="hidden">
+    <div id="modal-box">
+      <div id="modal-titlebar">
+        <span id="modal-title"></span>
+        <button id="modal-close" class="win-btn">&times;</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ── LIGHTBOX ── -->
+  <div id="lightbox" class="hidden" role="dialog" aria-modal="true">
+    <button id="lb-close" class="win-btn" aria-label="Close">&times;</button>
+    <button id="lb-prev" class="win-btn" aria-label="Previous image">&#8249;</button>
+    <img id="lb-img" src="" alt="Full size image">
+    <button id="lb-next" class="win-btn" aria-label="Next image">&#8250;</button>
+  </div>
+
+  <script>
+  (function () {
+
+    /* ── RULERS ──────────────────────────────── */
+    function drawH(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      const W = window.innerWidth - 24, H = 24;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+      const c = canvas.getContext('2d');
+      c.scale(dpr, dpr);
+      c.fillStyle = '#d4d4aa'; c.fillRect(0, 0, W, H);
+      c.strokeStyle = '#a0a07a'; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(0, H - 0.5); c.lineTo(W, H - 0.5); c.stroke();
+      c.font = '7px Courier New'; c.fillStyle = '#5a5a38'; c.textBaseline = 'top';
+      for (let x = 0; x < W; x++) {
+        let h = 0;
+        if (x % 100 === 0) h = 13;
+        else if (x % 50 === 0) h = 9;
+        else if (x % 10 === 0) h = 5;
+        else if (x % 5 === 0) h = 3;
+        if (h) {
+          c.strokeStyle = x % 50 === 0 ? '#5a5a38' : '#8a8a60';
+          c.lineWidth = x % 100 === 0 ? 1 : 0.5;
+          c.beginPath(); c.moveTo(x + 0.5, H - 1); c.lineTo(x + 0.5, H - 1 - h); c.stroke();
+        }
+        if (x > 0 && x % 100 === 0) c.fillText(String(x), x + 2, 2);
+      }
+    }
+
+    function drawV(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      const W = 24, H = window.innerHeight - 24;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+      const c = canvas.getContext('2d');
+      c.scale(dpr, dpr);
+      c.fillStyle = '#d4d4aa'; c.fillRect(0, 0, W, H);
+      c.strokeStyle = '#a0a07a'; c.lineWidth = 1;
+      c.beginPath(); c.moveTo(W - 0.5, 0); c.lineTo(W - 0.5, H); c.stroke();
+      c.font = '7px Courier New'; c.fillStyle = '#5a5a38'; c.textBaseline = 'middle';
+      for (let y = 0; y < H; y++) {
+        let w = 0;
+        if (y % 100 === 0) w = 13;
+        else if (y % 50 === 0) w = 9;
+        else if (y % 10 === 0) w = 5;
+        else if (y % 5 === 0) w = 3;
+        if (w) {
+          c.strokeStyle = y % 50 === 0 ? '#5a5a38' : '#8a8a60';
+          c.lineWidth = y % 100 === 0 ? 1 : 0.5;
+          c.beginPath(); c.moveTo(W - 1, y + 0.5); c.lineTo(W - 1 - w, y + 0.5); c.stroke();
+        }
+        if (y > 0 && y % 100 === 0) {
+          c.save();
+          c.translate(W - 14, y);
+          c.rotate(-Math.PI / 2);
+          c.fillText(String(y), -12, 0);
+          c.restore();
+        }
+      }
+    }
+
+    function initRulers() {
+      drawH(document.getElementById('ruler-top'));
+      drawV(document.getElementById('ruler-left'));
+    }
+    window.addEventListener('load', initRulers);
+    window.addEventListener('resize', initRulers);
+
+    /* ── SCATTERED MOSAIC ───────────────────────── */
+    function scatterImages() {
+      var home = document.getElementById('home');
+      var tiles = Array.from(home.querySelectorAll('.thumb-tile'));
+      var W = home.offsetWidth;
+      var tileW = Math.round(W / 6);
+      var tileH = Math.round(tileW * 2 / 3);
+      var cols = 6;
+      var rows = Math.ceil(tiles.length / cols) + 1;
+      var totalH = rows * (tileH + 16) + tileH;
+      home.style.position = 'relative';
+      home.style.height = Math.max(totalH, window.innerHeight - home.getBoundingClientRect().top - 8) + 'px';
+
+      var rng = (function() { var s = 42; return function() { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; }; })();
+
+      tiles.forEach(function(tile, i) {
+        var col = i % cols;
+        var row = Math.floor(i / cols);
+        var baseX = col * (W / cols);
+        var baseY = row * (tileH + 20);
+        var jitterX = (rng() - 0.5) * (W / cols * 0.5);
+        var jitterY = (rng() - 0.5) * 40;
+        var rot = (rng() - 0.5) * 6;
+        var x = Math.max(0, Math.min(W - tileW - 4, baseX + jitterX));
+        var y = Math.max(0, baseY + jitterY + 8);
+        tile.style.position = 'absolute';
+        tile.style.width = tileW + 'px';
+        tile.style.height = tileH + 'px';
+        tile.style.left = x + 'px';
+        tile.style.top = y + 'px';
+        tile.style.transform = 'rotate(' + rot + 'deg)';
+        tile.style.zIndex = i;
+        tile.style.aspectRatio = 'unset';
+        setTimeout(function(t) { t.classList.add('scattered'); }, i * 18, tile);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', scatterImages);
+    window.addEventListener('resize', scatterImages);
+
+    /* ── LIGHTBOX ────────────────────────────── */
+    var lbSrcs = [], lbIdx = 0;
+    var lb      = document.getElementById('lightbox');
+    var lbImg   = document.getElementById('lb-img');
+
+    function openLB(srcs, idx) {
+      lbSrcs = srcs; lbIdx = idx;
+      lbImg.src = srcs[idx];
+      lb.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLB() {
+      lb.classList.add('hidden');
+      document.body.style.overflow = '';
+      lbImg.src = '';
+    }
+    function prevLB() { lbIdx = (lbIdx - 1 + lbSrcs.length) % lbSrcs.length; lbImg.src = lbSrcs[lbIdx]; }
+    function nextLB() { lbIdx = (lbIdx + 1) % lbSrcs.length; lbImg.src = lbSrcs[lbIdx]; }
+
+    document.getElementById('lb-close').addEventListener('click', closeLB);
+    document.getElementById('lb-prev').addEventListener('click', prevLB);
+    document.getElementById('lb-next').addEventListener('click', nextLB);
+    lb.addEventListener('click', function(e) { if (e.target === lb) closeLB(); });
+    document.addEventListener('keydown', function(e) {
+      if (lb.classList.contains('hidden')) return;
+      if (e.key === 'Escape') closeLB();
+      if (e.key === 'ArrowLeft') prevLB();
+      if (e.key === 'ArrowRight') nextLB();
+    });
+
+    /* wrap filmstrip images in .film-frame for inset shadow */
+    document.querySelectorAll('.filmstrip img').forEach(function(img) {
+      var frame = document.createElement('div');
+      frame.className = 'film-frame';
+      img.parentNode.insertBefore(frame, img);
+      frame.appendChild(img);
+    });
+
+    /* filmstrip click → lightbox */
+    document.querySelectorAll('.filmstrip').forEach(function(strip) {
+      var imgs = Array.from(strip.querySelectorAll('img'));
+      imgs.forEach(function(img, i) {
+        img.addEventListener('click', function() {
+          openLB(imgs.map(function(im) { return im.src; }), i);
+        });
+      });
+    });
+
+    /* ── MODAL ───────────────────────────────── */
+    var modal = document.getElementById('modal');
+    var modalBody = document.getElementById('modal-body');
+    var modalTitle = document.getElementById('modal-title');
+    var mainEl = document.querySelector('main');
+    var currentSection = null;
+
+    function openModal(id) {
+      var target = document.getElementById(id);
+      if (!target) return;
+      if (currentSection && currentSection !== target) {
+        currentSection.style.display = 'none';
+        mainEl.appendChild(currentSection);
+      }
+      var titleEl = target.querySelector('.project-title, .about-title');
+      modalTitle.textContent = titleEl ? titleEl.textContent : id;
+      target.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+        img.removeAttribute('loading');
+      });
+      target.style.display = 'block';
+      modalBody.appendChild(target);
+      currentSection = target;
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      modal.scrollTop = 0;
+      document.querySelector('nav ul').classList.add('visible');
+      document.querySelector('.site-tagline').classList.add('visible');
+    }
+
+    function closeModal() {
+      if (currentSection) {
+        currentSection.style.display = 'none';
+        mainEl.appendChild(currentSection);
+        currentSection = null;
+      }
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+      document.querySelector('nav ul').classList.remove('visible');
+      document.querySelector('.site-tagline').classList.remove('visible');
+    }
+
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e) {
+      if (!modal.classList.contains('hidden') && e.key === 'Escape') closeModal();
+    });
+
+    document.querySelectorAll('.thumb-tile').forEach(function(tile) {
+      tile.addEventListener('click', function(e) {
+        e.preventDefault();
+        var href = this.getAttribute('href');
+        if (href && href.startsWith('#')) openModal(href.slice(1));
+      });
+    });
+
+    document.querySelectorAll('nav a[href^="#"]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        var id = this.getAttribute('href').slice(1);
+        if (id === 'home') closeModal();
+        else openModal(id);
+      });
+    });
+
+  })();
+  </script>
+
+</body>
+</html>
