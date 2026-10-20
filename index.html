@@ -1477,6 +1477,21 @@
       });
     });
 
+    /* site name: back to the homepage with every tile showing */
+    document.querySelectorAll('.site-name-link').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        closeModal();
+        var allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+        document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+        if (allBtn) allBtn.classList.add('active');
+        currentFilter = 'all';
+        layoutGrid();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (history.replaceState) history.replaceState(null, '', location.pathname);
+      });
+    });
+
     document.querySelectorAll('nav a[href^="#"], .filter-link[href^="#"]').forEach(function(a) {
       a.addEventListener('click', function(e) {
         e.preventDefault();
