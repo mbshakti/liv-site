@@ -696,6 +696,22 @@
     /* ── BACK BUTTON ── */
     #back-btn { display: none; }
 
+    /* ── HOME REEL: cyanotype stop motion, bottom right, desktop only ── */
+    .home-reel {
+      display: none;
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 240px;
+      z-index: 300;
+      border: 2px solid;
+      border-color: #dfdfdf #808080 #808080 #dfdfdf;
+      background: #111;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      pointer-events: none;
+    }
+    @media (min-width: 901px) and (hover: hover) { .home-reel { display: block; } }
+
     /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
@@ -1283,6 +1299,8 @@
       </section>
 
     </main>
+
+    <video class="home-reel" src="projects/ART-PHOTOS/Sequence 02_3.mp4" autoplay muted loop playsinline aria-hidden="true" tabindex="-1"></video>
 
     <footer>
       <p>&copy; 2026 Olivia Acu&ntilde;a &mdash; Brooklyn, NY</p>
