@@ -1259,20 +1259,13 @@
       var hidden = allTiles.filter(function(t) { return shown.indexOf(t) === -1; });
       var W     = grid.offsetWidth;
       var n     = shown.length;
-      var availH = window.innerHeight - home.getBoundingClientRect().top - 8;
-
       /* three columns everywhere: big tiles, the grid scrolls when there are many */
       var cols  = 3;
       var tileW = Math.round(W / cols);
       var tileH = Math.round(tileW * 2 / 3);
       var rows  = Math.ceil(n / cols);
 
-      /* spread the rows so the tiles run the full height of the grid area */
       var rowStep = tileH + 20;
-      if (rows > 1) {
-        var spread = (availH - tileH - 28) / (rows - 1);
-        rowStep = Math.max(tileH + 20, Math.min(spread, tileH * 1.6));
-      }
 
       grid.style.position = 'relative';
       shown.forEach(function(tile, i) {
@@ -1293,8 +1286,8 @@
 
       placeTiles(shown, W, tileW, tileH, cols, rowStep);
 
-      var contentH = (rows - 1) * rowStep + tileH + 48;
-      grid.style.height = Math.max(contentH, availH) + 'px';
+      /* the grid is exactly as tall as its tiles */
+      grid.style.height = ((rows - 1) * rowStep + tileH + 48) + 'px';
       return shown;
     }
 
