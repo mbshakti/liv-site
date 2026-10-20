@@ -184,6 +184,8 @@
       scroll-margin-top: 56px;
     }
     .grid-label .count { color: var(--muted); }
+    .grid-label.is-all { min-height: 0; margin: 0; }
+    .label-mobile-only { display: none; }
     .grid-label.pulse { animation: label-pulse 0.9s ease-out; }
     @keyframes label-pulse {
       0%   { color: var(--text); transform: translateX(6px); }
@@ -240,6 +242,8 @@
     @media (max-width: 680px) {
       .home-wrapper { flex-direction: column; align-items: stretch; }
       .title-break { display: block; }
+      .label-mobile-only { display: inline; }
+      .grid-label.is-all { min-height: 1.3em; margin: 0 0 10px; }
       .site-title { line-height: 1.05; font-size: 2rem; }
       header { padding-right: 250px; }
       footer { flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -1339,8 +1343,15 @@
       var label = document.getElementById('grid-label');
       if (label) {
         var btn = document.querySelector('.filter-btn[data-filter="' + currentFilter + '"]');
-        var name = btn ? btn.textContent.trim() : 'All work';
-        label.innerHTML = name + ' <span class="count">&middot; ' + n + (n === 1 ? ' piece' : ' pieces') + '</span>';
+        if (currentFilter === 'all') {
+          /* no label for the full set on desktop; phones get a one-word title instead */
+          label.innerHTML = '<span class="label-mobile-only">Filmmaker</span>';
+          label.classList.add('is-all');
+        } else {
+          var name = btn ? btn.textContent.trim() : '';
+          label.innerHTML = name + ' <span class="count">&middot; ' + n + (n === 1 ? ' piece' : ' pieces') + '</span>';
+          label.classList.remove('is-all');
+        }
       }
 
       /* the grid is exactly as tall as its tiles */
