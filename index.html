@@ -705,19 +705,25 @@
 
     /* ── HOME REEL: cyanotype stop motion, bottom right, desktop only ── */
     .home-reel {
-      display: none;
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-      width: 320px;
-      z-index: 300;
+      display: block;
+      width: 100%;
+      margin: 28px 0 10px;
       border: 2px solid;
       border-color: #dfdfdf #808080 #808080 #dfdfdf;
       background: #111;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       pointer-events: none;
     }
-    @media (min-width: 901px) and (hover: hover) { .home-reel { display: block; } }
+    @media (min-width: 901px) {
+      .home-reel {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        width: 320px;
+        margin: 0;
+        z-index: 300;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      }
+    }
 
     /* ── FOOTER ── */
     footer {
