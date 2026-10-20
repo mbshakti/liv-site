@@ -1310,7 +1310,7 @@
 
     </main>
 
-    <video class="home-reel" src="projects/ART-PHOTOS/Sequence 02_3.mp4" autoplay muted loop playsinline aria-hidden="true" tabindex="-1"></video>
+    <video class="home-reel" src="projects/ART-PHOTOS/Sequence 02_3.mp4" autoplay muted loop playsinline preload="auto" disablepictureinpicture aria-hidden="true" tabindex="-1"></video>
 
     <footer>
       <p>&copy; 2026 Olivia Acu&ntilde;a &mdash; Brooklyn, NY</p>
@@ -1670,6 +1670,25 @@
         if (href && href.startsWith('#')) openModal(href.slice(1));
       });
     });
+
+    /* homepage reel: some phones block autoplay until the page is touched, so retry on first interaction */
+    (function () {
+      var reel = document.querySelector('.home-reel');
+      if (!reel) return;
+      function tryPlay() {
+        reel.muted = true;
+        var p = reel.play();
+        if (p && p.catch) p.catch(function() {});
+      }
+      tryPlay();
+      ['touchstart', 'scroll', 'click', 'keydown'].forEach(function(ev) {
+        window.addEventListener(ev, function once() {
+          tryPlay();
+          if (!reel.paused) window.removeEventListener(ev, once);
+        }, { passive: true });
+      });
+      document.addEventListener('visibilitychange', function() { if (!document.hidden) tryPlay(); });
+    })();
 
     /* site name: back to the homepage with every tile showing */
     document.querySelectorAll('.site-name-link').forEach(function(a) {
