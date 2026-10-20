@@ -316,6 +316,8 @@
     .project-grid {
       display: block;
       position: relative;
+      isolation: isolate;
+      z-index: 1;
     }
     .project-grid .thumb-tile {
       opacity: 0;
@@ -1538,6 +1540,8 @@
     document.querySelectorAll('.thumb-tile').forEach(function(tile) {
       tile.addEventListener('click', function(e) {
         e.preventDefault();
+        tile.style.transform = tile.dataset.baseTransform || '';
+        tile.style.zIndex = tile.dataset.baseZ || 0;
         var href = this.getAttribute('href');
         if (href && href.startsWith('#')) openModal(href.slice(1));
       });
