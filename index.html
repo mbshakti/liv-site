@@ -169,10 +169,26 @@
       display: flex;
       align-items: flex-start;
     }
-    #home {
+    .home-main {
       flex: 1;
       min-width: 0;
     }
+    #home { min-width: 0; }
+    .grid-label {
+      font-family: 'Courier Prime', 'Courier New', monospace;
+      font-size: 16px;
+      color: var(--accent);
+      margin: 0 0 10px;
+      min-height: 1.3em;
+      scroll-margin-top: 56px;
+    }
+    .grid-label .count { color: var(--muted); }
+    .grid-label.pulse { animation: label-pulse 0.9s ease-out; }
+    @keyframes label-pulse {
+      0%   { color: var(--text); transform: translateX(6px); }
+      100% { color: var(--accent); transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) { .grid-label.pulse { animation: none; } }
     .home-sidebar {
       width: 340px;
       flex-shrink: 0;
@@ -223,7 +239,7 @@
     @media (max-width: 680px) {
       .home-wrapper { flex-direction: column; align-items: stretch; }
       footer { flex-direction: column; align-items: flex-start; gap: 6px; }
-      #home { width: 100%; }
+      .home-main { width: 100%; }
       .home-sidebar { width: 100%; position: static; padding: 28px 0 8px; display: block; }
       .sidebar-about { font-size: 16px; margin-bottom: 16px; }
       .filter-btn { font-size: 16px; }
@@ -792,6 +808,8 @@
 
       <!-- ── HOME ── -->
       <div class="home-wrapper">
+      <div class="home-main">
+        <div class="grid-label" id="grid-label" aria-live="polite"></div>
       <section id="home">
           <div class="project-grid" id="project-grid">
             <!-- soil story -->
@@ -848,6 +866,7 @@
             <a href="#art-photos" class="thumb-tile" data-category="photos"><img src="projects/ART-PHOTOS/VAMPIRE_/P1300564-Edit-3.jpg" alt="Art"></a>
           </div>
       </section>
+      </div>
       <aside class="home-sidebar">
         <div class="sidebar-about">
           I am an interdisciplinary artist, filmmaker and programmer. I like being in the woods, bugs, vampires, the ocean, puppets, peoples dreams, remembering things, movies, theaters and making things with my friends. I am also starting to like painting more.
@@ -1287,6 +1306,13 @@
 
       placeTiles(shown, W, tileW, tileH, cols, rowStep);
 
+      var label = document.getElementById('grid-label');
+      if (label) {
+        var btn = document.querySelector('.filter-btn[data-filter="' + currentFilter + '"]');
+        var name = btn ? btn.textContent.trim() : 'All work';
+        label.innerHTML = name + ' <span class="count">&middot; ' + n + (n === 1 ? ' piece' : ' pieces') + '</span>';
+      }
+
       /* the grid is exactly as tall as its tiles */
       grid.style.height = ((rows - 1) * rowStep + tileH + 48) + 'px';
       return shown;
@@ -1327,6 +1353,11 @@
             currentFilter = btn.dataset.filter;
           }
           layoutGrid();
+          var label = document.getElementById('grid-label');
+          if (label) {
+            label.classList.remove('pulse'); void label.offsetWidth; label.classList.add('pulse');
+            label.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         });
       });
     });
