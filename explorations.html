@@ -243,12 +243,16 @@
       .home-wrapper { flex-direction: column; align-items: stretch; }
       .title-break { display: block; }
       .label-mobile-only { display: inline; }
-      .grid-label.is-all { min-height: 1.3em; margin: 0 0 10px; }
       .site-title { line-height: 1.05; font-size: 2rem; }
       header { padding-right: 250px; }
       footer { flex-direction: column; align-items: flex-start; gap: 6px; }
-      /* start the grid below the pinned reel (reel height ≈ 0.62 × its width) */
-      .home-main { width: 100%; padding-top: max(0px, calc(min(230px, 100vw - 180px) * 0.62 - 110px)); }
+      /* the label hugs the name; the gap below it lets the grid clear the pinned reel (height ≈ 0.62 × width) */
+      .home-main { width: 100%; --reel-gap: max(0px, calc(min(230px, 100vw - 180px) * 0.62 - 110px)); }
+      .grid-label, .grid-label.is-all {
+        min-height: 1.3em;
+        margin-top: 0;
+        margin-bottom: calc(var(--reel-gap) + 10px);
+      }
       .home-sidebar { width: 100%; position: static; padding: 28px 0 8px; display: block; }
       .sidebar-about { font-size: 16px; margin-bottom: 16px; }
       .filter-btn { font-size: 16px; }
